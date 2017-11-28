@@ -1,0 +1,6 @@
+Pour l'actualisation des tables FicheForfait, LignesFraisForfait et LignesFraisHorsForfait, il faut
+- Avoir install� la base et les tables FraisForfait, Utilisateur et Etat
+- Copier le dossier dans le r�pertoire de publication
+- Ouvrir avec un �diteur le fichier majGsb_main.php
+- remplacer les valeurs de la connexion � la base avec vos param�tres
+- lancer l'interpr�tation du script avec le navigateur
