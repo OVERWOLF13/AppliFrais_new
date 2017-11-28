@@ -38,7 +38,7 @@ class C_comptable extends CI_Controller {
 			// Aiguillage selon l'action demandée 
 			// CI a traité l'URL au préalable de sorte à toujours renvoyer l'action "index"
 			// même lorsqu'aucune action n'est exprimée
-			if ($action == 'index')				// index demandé : on active la fonction accueil du modèle utilisateur
+			if ($action == 'index')				// index demandé : on active la fonction accueil du modèle comptable
 			{
 				$this->load->model('a_comptable');
 
@@ -47,7 +47,7 @@ class C_comptable extends CI_Controller {
 
 				$this->a_comptable->accueil();
 			}
-			elseif ($action == 'ValiderFiches')		// mesFiches demandé : on active la fonction mesFiches du modèle utilisateur
+			elseif ($action == 'ValiderFiches')		// ValiderFiches demandé : on active la fonction ValiderFiches du modèle comptable
 			{
 				$this->load->model('a_comptable');
 
@@ -73,8 +73,8 @@ class C_comptable extends CI_Controller {
 				// mémorisation du mode modification en cours 
 				// on mémorise le mois de la fiche en cours de modification
 				$this->session->set_userdata('mois', $mois);
-				// obtention de l'id utilisateur courant
-				$idVisiteur = $this->session->userdata('idUser');
+				// obtention de l'id de l'utilisateur à qui appartien la fiche
+				$idVisiteur = $params[1];
 
 				$this->a_comptable->voirFiche($idVisiteur, $mois);
 			}
