@@ -5,9 +5,9 @@
 		Afin de couvrir les frais des visiteurs engagés lors de leurs déplacements professionnels, vous devez signés les fiches de frais mensuelles.
 	</p>
 		<ul>
-			<li>Une fiche de frais court du 1er au dernier jour du mois;
-			<li>Les fiches de frais sont créées automatiquement par l'application au fil de leur utilisation;
-			<li>Lorsqu'une fiche sont totalements renseignées, ils doivent la "signer" afin que vous puissiez la traiter ;
+			<li>Une fiche de frais court du 1er au dernier jour du mois;</li>
+			<li>Les fiches de frais sont créées automatiquement par l'application au fil de leur utilisation;</li>
+			<li>Lorsqu'une fiche sont totalements renseignées, ils doivent la "signer" afin que vous puissiez la traiter ;</li>
 		</ul>
 	
 

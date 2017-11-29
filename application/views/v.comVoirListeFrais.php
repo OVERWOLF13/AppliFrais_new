@@ -19,7 +19,7 @@ $this->load->helper('url');
 					echo 
 					'<p>
 						<label for="'.$idFrais.'">'.$libelle.'</label>
-						<input type="texte" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" disabled="disabled" />
+						<input type="text" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" disabled="disabled" />
 					</p>
 					';
 				}
