@@ -10,19 +10,32 @@ $this->load->helper('url');
 		<fieldset>
 			<legend>Eléments forfaitisés</legend>
 			<?php
+			echo
+			'<table>
+					<thead>
+					<th></th>
+					<th>Quantité</th>
+					<th>Montant</th>
+					<th>Montant Total</th>
+					</thead>
+			';
 				foreach ($lesFraisForfait as $unFrais)
 				{
 					$idFrais = $unFrais['idfrais'];
 					$libelle = $unFrais['libelle'];
 					$quantite = $unFrais['quantite'];
+					$montant = $unFrais['montant'];
+					$montantTotal = $unFrais['montantTotal'];
 
 					echo 
-					'<p>
-						<label for="'.$idFrais.'">'.$libelle.'</label>
-						<input type="texte" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" disabled="disabled" />
-					</p>
+					'<tr>
+						<td>'.$libelle.'</td></td><td>'.$quantite.'</td>
+						<td> <input type="texte" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$montant.'"  /></td>
+						<td>'.$montantTotal.'</td>
+					</tr>
 					';
 				}
+			echo '</table>';
 			?>
 		</fieldset>
 		<p></p>
