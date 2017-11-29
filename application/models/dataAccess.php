@@ -80,7 +80,7 @@ class DataAccess extends CI_Model {
 	 * @return l'id, le libelle et la quantité sous la forme d'un tableau associatif 
 	*/
 	public function getLesLignesForfait($idVisiteur, $mois){
-		$req = "select fraisforfait.id as idfrais, fraisforfait.libelle as libelle, lignefraisforfait.quantite as quantite 
+		$req = "select fraisforfait.id as idfrais, fraisforfait.libelle as libelle, lignefraisforfait.quantite as quantite , lignefraisforfait.montantApplique as montant, lignefraisforfait.montantApplique * lignefraisforfait.quantite as montantTotal
 				from lignefraisforfait inner join fraisforfait 
 					on fraisforfait.id = lignefraisforfait.idfraisforfait
 				where lignefraisforfait.idvisiteur ='$idVisiteur' and lignefraisforfait.mois='$mois' 
