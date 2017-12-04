@@ -153,6 +153,8 @@ class C_comptable extends CI_Controller {
 				$this->a_comptable->ValiderFiches();
 			}
 			
+			
+			
 			elseif ($action == 'refuFiche')
 			{
 				$this->load->model('a_comptable');

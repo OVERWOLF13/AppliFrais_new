@@ -25,6 +25,7 @@ $this->load->helper('url');
 				$modLink = '';
 				$validLink = '';
 				$refuLink = '';
+				$suivLink ='';
 				
 				if ($uneFiche['id'] == 'CR') {
 					$modLink = anchor('c_comptable/voirFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], 'voir',  'title="Voir la fiche"');

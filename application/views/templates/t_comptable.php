@@ -52,6 +52,11 @@ $v_path = base_url('application/views');
 					</li>
 					
 					<li class="smenu">
+						<?php echo anchor('c_comptable/SuivreFiches', 'Suivre le paiement des fiches de frais', 'title="suivi des fiches de frais"'); ?>
+					<br></br>
+					</li>
+					
+					<li class="smenu">
 						<?php echo anchor('c_comptable/deconnecter', 'Se déconnecter', 'title="Déconnexion"'); ?>
 					</li>
 				</ul>
