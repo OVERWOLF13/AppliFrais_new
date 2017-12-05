@@ -30,22 +30,23 @@
 			<!-- Division pour le menu -->
 			<div id="menuGauche">
 				<div id="infosUtil">
-					<h2></h2>
 				</div>  
 				
 				<ul id="menuList">
 					<li>
-						Visiteur :<br/>
-						<?php echo $this->session->userdata('prenom')."  ".$this->session->userdata('nom');  ?>
+						Visiteur :<br />
 					</li>
-					<br/>
+					
+					<li>					
+						<h2><?php echo $this->session->userdata('prenom')."  ".$this->session->userdata('nom');  ?></h2><br />
+					</li>
 					<li class="smenu">
-						<?php echo anchor('c_visiteur/', 'Accueil', 'title="Page d\'accueil"'); ?>
+						<?php echo anchor('c_visiteur/', 'Accueil', 'title="Page d\'accueil"'); ?><br />
 					</li>
 					<li class="smenu">
-						<?php echo anchor('c_visiteur/mesFiches', 'Mes fiches de frais', 'title="Consultation de mes fiches de frais"'); ?>
+						<?php echo anchor('c_visiteur/mesFiches', 'Mes fiches de frais', 'title="Consultation de mes fiches de frais"'); ?><br />
 					</li>
-					<br/>
+					
 					<li class="smenu">
 						<?php echo anchor('c_visiteur/deconnecter', 'Se déconnecter', 'title="Déconnexion"'); ?>
 					</li>
@@ -56,7 +57,10 @@
 			<?php echo $body; ?>
 
 			<div id="pied">
-				<br/>
+				<p>
+					<a href="http://validator.w3.org/check?uri=referer"><img
+				    src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
+				</p>
 			</div>
 
 		</div>    
