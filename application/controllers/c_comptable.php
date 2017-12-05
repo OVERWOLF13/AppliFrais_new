@@ -140,20 +140,20 @@ class C_comptable extends CI_Controller {
 			
 			elseif ($action == 'validFiche')
 			{
-				$this->load->model('a_comptable');
-				
-				// obtention de l'id du utilisateur et du mois concerné
-				$mois= $params[0];
-				$idVisiteur = $params[1];
-				
-				// méthode pour valider la fiche de frais
-				$this->a_comptable->validFiche($idVisiteur, $mois);
-				
-				//retours au menu de validation
-				$this->a_comptable->ValiderFiches();
+
 			}
 			
 			
+			elseif ($action == 'commentrefuFiche')
+			{
+				$this->load->model('a_comptable');
+				
+				// obtention de l'id du utilisateur et du mois concerné
+				$data['mois'] = $mois= $params[0];
+				$data['$idVisiteur'] = $params[1];
+				
+				$this->templates->load('t_comptable','v_comCommenterRefus', $data);
+			}
 			
 			elseif ($action == 'refuFiche')
 			{
@@ -162,15 +162,16 @@ class C_comptable extends CI_Controller {
 				// obtention de l'id du utilisateur et du mois concerné
 				$mois= $params[0];
 				$idVisiteur = $params[1];
+				$commentaire = $_POST['commentaire'];
 				
 				// méthode pour valider la fiche de frais
-				$this->a_comptable->refuFiche($idVisiteur, $mois);
+				$this->a_comptable->refuFiche($idVisiteur, $mois, $commentaire);
 				
 				//retours au menu de validation
 				$this->a_comptable->ValiderFiches();
 			}
 			
-			else								// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404
+			else	// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404
 			{
 				show_404();
 			}

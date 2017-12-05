@@ -133,8 +133,8 @@ class A_comptable extends CI_Model {
 		$this->dataAccess->validFiche($idVisiteur, $mois);
 	}
 	
-	public function refuFiche($idVisiteur, $mois)
+	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
-		$this->dataAccess->refuFiche($idVisiteur, $mois);
+		$this->dataAccess->refuFiche($idVisiteur, $mois, $commentaire);
 	}
 }
