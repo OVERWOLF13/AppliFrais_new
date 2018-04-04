@@ -15,18 +15,21 @@ $this->load->helper('url');
 					$idFrais = $unFrais['idfrais'];
 					$libelle = $unFrais['libelle'];
 					$quantite = $unFrais['quantite'];
+					$montant = $unFrais['montant'];
 
 					echo 
-					'<p>
-						<label for="'.$idFrais.'">'.$libelle.'</label>
-						<input type="text" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" disabled="disabled" />
-					</p>
-					';
+					'<div>'
+					. $libelle.' : '. $quantite.
+						'<form action="'.base_url('c_comptable/modifMontantFrais').'" method="post" class="flotant">
+						<input type="number" step="any" value="'.$montant.'" min="0" name = "'.$idFrais.'"</input>
+						<input type="submit" value = "modifier le montant du frais" />
+						</form>
+					</div>';
 				}
 			?>
 		</fieldset>
 		<p></p>
-	</div>
+	</div>  
 
 	
 	<table class="listeLegere">
@@ -49,7 +52,6 @@ $this->load->helper('url');
 					<td class="date">'.$date.'</td>
 					<td class="libelle">'.$libelle.'</td>
 					<td class="montant">'.$montant.'</td>
-				
 				</tr>';
 			}
 		?>	  

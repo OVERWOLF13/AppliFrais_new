@@ -44,13 +44,13 @@ class A_comptable extends CI_Model {
 	 * @param $idVisiteur : l'id du utilisateur 
 	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
 	*/
-	public function ValiderFiches ($idVisiteur = NULL, $message=null)
+	public function ValiderFiches ($message=null)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
 
 		$data['notify'] = $message;
-		$data['ValiderFiches'] = $this->dataAccess->getFiches();		
+		$data['ValiderFiches'] = $this->dataAccess->getFichesCom();
 		$this->templates->load('t_comptable', 'v_comValidFiche', $data);
-	}	
+	}
 
 	/**
 	 * Présente le détail de la fiche sélectionnée 
@@ -128,13 +128,24 @@ class A_comptable extends CI_Model {
 	    $this->dataAccess->supprimerLigneHorsForfait($idLigneFrais);
 	}
 	
-	public function validFiche($idVisiteur, $mois)
+	public function validFiche($mois, $idVisiteur)
 	{
 		$this->dataAccess->validFiche($idVisiteur, $mois);
+		$this->ValiderFiches();
+		
 	}
 	
 	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
+		$commentaire = $_POST['commentaire'];
 		$this->dataAccess->refuFiche($idVisiteur, $mois, $commentaire);
+		$this->ValiderFiches();
+	}
+	
+	public function commentrefuFiche($mois, $idVisiteur)
+	{
+		$data['mois'] = $mois;
+		$data['idVisiteur'] = $idVisiteur;
+		$this->templates->load('t_comptable', 'v_comCommenterRefus', $data);
 	}
 }

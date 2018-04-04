@@ -8,25 +8,46 @@
 	<?php if(!empty($notify)) echo '<p id="notify" >'.$notify.'</p>';?>
 	 
 	<form method="post"  action="<?php echo base_url("c_visiteur/majForfait");?>">
-		<div class="corpsForm">
+		<div class="corpsForm" id="bodyForm">
 		  
 			<fieldset>
 				<legend>Eléments forfaitisés</legend>
-				<?php
+					<table id = "test">
+					<tr align="right">
+					<td></td>
+					<td><strong>Quantité</strong></td>
+					<td><strong>Montant</strong></td>
+					<td><strong>Total</strong></td>
+					</tr>
+					
+					<?php
+					$nb = 0;
 					foreach ($lesFraisForfait as $unFrais)
 					{
 						$idFrais = $unFrais['idfrais'];
 						$libelle = $unFrais['libelle'];
 						$quantite = $unFrais['quantite'];
+						$montant = $unFrais['montant'];
 
 						echo 
-						'<p>
-							<label for="'.$idFrais.'">'.$libelle.'</label>
-							<input type="text" id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" />
-						</p>
-						';
+						'<tr>
+							<td> <label for="'.$idFrais.'">'.$libelle.'</label></td>';
+						echo	'<td> <input type="number" min="0" class="inputQuantite" id="input_'.$idFrais.'" name="'.$idFrais.'" size="10" maxlength="5" value="'.$quantite.'" onchange = "calculMontantFrais(input_'.$idFrais.', '.$montant.','.$nb.')" onload = "calculMontantFrais(input_'.$idFrais.', '.$montant.', '.$nb.')" /></td>
+								 <td id = td_'.$idFrais.'>'.$montant.'</td>
+								 <td id="montant_Frais'.$nb.'" name="montant_Frais'.$nb.'"></td>
+						</tr>';
+						$nb++;
 					}
 				?>
+				
+				<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td id="prixTotal"></td>
+				</tr>
+					</table>
+				
 			</fieldset>
 		</div>
 		<div class="piedForm">
@@ -40,6 +61,7 @@
 	
 	<table class="listeLegere">
 		<caption>Descriptif des éléments hors forfait</caption>
+		
 		<tr>
 			<th >Date</th>
 			<th >Libellé</th>  

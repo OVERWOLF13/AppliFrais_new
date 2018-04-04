@@ -36,9 +36,17 @@ $this->load->helper('url');
 				echo 
 				'<tr>
 					<td class="libelle">'.$uneFiche['nomVisiteur'].' </td>
-					<td class="date">'.anchor('c_comptable/voirFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], $uneFiche['mois'],  'title="Consulter la fiche"').'</td>
-					<td class="libelle">'.$uneFiche['libelle'].'</td>
-					<td class="montant">'.$uneFiche['montantValide'].'</td>
+					<td class="date">'.anchor('c_comptable/voirFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], $uneFiche['mois'],  'title="Consulter la fiche"').'</td>';
+				if($uneFiche['libelle'] == 'Refusée')
+				{
+					echo '<td class="libelle">'.$uneFiche['libelle'].' : '.$uneFiche['commentaire'].'</td>';
+				}
+				else
+				{
+					echo '<td class="libelle">'.$uneFiche['libelle'].'</td>';
+				}
+				echo
+				   '<td class="montant">'.$uneFiche['montantValide'].'</td>
 					<td class="date">'.$uneFiche['dateModif'].'</td>
 					<td class="action">'.$modLink.'</td>
 					<td class="action">'.$validLink.'</td>

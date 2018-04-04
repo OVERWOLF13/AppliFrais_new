@@ -300,13 +300,17 @@ class DataAccess extends CI_Model {
 			order by mois desc";
 		}
 		
-		else
-		{
-			$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, Etat.id, libelle, idVisiteur
-			from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
-							 inner join utilisateur on fichefrais.idVisiteur = utilisateur.id 
-			order by mois desc";
-		}
+		$rs = $this->db->query($req);
+		$lesFiches = $rs->result_array();
+		return $lesFiches;
+	}
+	
+	public function getFichesCom ($idVisiteur = NULL) {
+		
+		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, Etat.id, libelle, idVisiteur, CommentaireRefus AS commentaire
+		from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
+						 inner join utilisateur on fichefrais.idVisiteur = utilisateur.id
+		order by idVisiteur, Etat.id, mois desc";
 		
 		$rs = $this->db->query($req);
 		$lesFiches = $rs->result_array();
@@ -365,9 +369,9 @@ class DataAccess extends CI_Model {
 		
 	}
 	
-	public function refuFiche($idVisiteur, $mois)
+	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
-		$req = "UPDATE fichefrais SET idEtat = 'RE', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
+		$req = "UPDATE fichefrais SET idEtat = 'RE', dateModif = NOW(), CommentaireRefus = '$commentaire' WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
 		
 		$this->db->simple_query($req);
 		

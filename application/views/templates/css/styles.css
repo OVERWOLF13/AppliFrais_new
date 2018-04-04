@@ -107,6 +107,11 @@ ul#menuList a:hover {
   text-align:center;
 }
 
+/*.flotant
+{
+	float: left;
+}*/
+
 #contenu pre {
   width:95%;
   overflow : scroll;
@@ -221,6 +226,8 @@ taille de caract�res l�g�rement sup�rieure � la normale */
 }
 
 /* Styles pour les tableaux de la page principale */
+
+
 #contenu table {
    background-color:#FFF;
    border : 0.1em solid #777777;
@@ -296,6 +303,34 @@ table.listeLegere th.eltForfait{
   color:black;
 }
 
+#bodyForm table
+{
+	border: none;
+	float: right;
+	width: 100%;
+}
+
+#bodyForm td
+{
+	border: none;
+	text-align: right;
+}
+
+.inputQuantite
+{
+	text-align: right;
+}
+
+#bodyForm tr
+{
+	border: none;
+}
+
+#bodyForm label
+{
+	width: 100%;
+}
+
 #contenu h2 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -312,4 +347,9 @@ table.listeLegere th.eltForfait{
 #contenu img {
   height : 28px;
   float : left;
+}
+
+.titre
+{
+	text-align: center;
 }

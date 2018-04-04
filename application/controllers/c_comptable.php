@@ -54,7 +54,6 @@ class C_comptable extends CI_Controller {
 				// on n'est pas en mode "modification d'une fiche"
 				$this->session->unset_userdata('mois');
 
-				$idVisiteur = $this->session->userdata('idUser');
 				$this->a_comptable->ValiderFiches();
 			}
 			elseif ($action == 'deconnecter')	// deconnecter demandé : on active la fonction deconnecter du modèle authentif
@@ -98,6 +97,7 @@ class C_comptable extends CI_Controller {
 				// ... et on revient en modification de la fiche
 				$this->a_comptable->modFiche($idVisiteur, $mois, 'Modification(s) des éléments forfaitisés enregistrée(s) ...');
 			}
+			
 			elseif ($action == 'ajouteFrais') // ajouteLigneFrais demandé : on active la fonction ajouteLigneFrais du modèle utilisateur ...
 			{	// TODO : conrôler que l'obtention des données postées ne rend pas d'erreurs
 				// TODO : dans la dynamique de l'application, contrôler que l'on vient bien de modFiche
@@ -140,7 +140,14 @@ class C_comptable extends CI_Controller {
 			
 			elseif ($action == 'validFiche')
 			{
-
+				$this->load->model('a_comptable');
+				
+				// obtention de l'id du utilisateur et du mois concerné
+				$mois= $params[0];
+				$idVisiteur = $params[1];
+				
+				//retours au menu de validation				
+				$this->a_comptable->validFiche($mois, $idVisiteur);
 			}
 			
 			
@@ -149,10 +156,10 @@ class C_comptable extends CI_Controller {
 				$this->load->model('a_comptable');
 				
 				// obtention de l'id du utilisateur et du mois concerné
-				$data['mois'] = $mois= $params[0];
-				$data['$idVisiteur'] = $params[1];
+				$mois = $params[0];
+				$idVisiteur = $params[1];
 				
-				$this->templates->load('t_comptable','v_comCommenterRefus', $data);
+				$this->a_comptable->commentrefuFiche($mois, $idVisiteur);
 			}
 			
 			elseif ($action == 'refuFiche')
@@ -166,9 +173,13 @@ class C_comptable extends CI_Controller {
 				
 				// méthode pour valider la fiche de frais
 				$this->a_comptable->refuFiche($idVisiteur, $mois, $commentaire);
+			}
+			
+			else if ($action = 'SuivreFiche')
+			{
+				$this->load->model('a_comptable');
 				
-				//retours au menu de validation
-				$this->a_comptable->ValiderFiches();
+				
 			}
 			
 			else	// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404

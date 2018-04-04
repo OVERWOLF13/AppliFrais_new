@@ -18,7 +18,7 @@ class A_visiteur extends CI_Model {
 	 * Si l'une d'elle est absente, elle est créée
 	*/
 	public function accueil()
-	{	// TODO : Contrôler que toutes les valeurs de $unMois sont valides (chaine de caractère dans la BdD)
+	{ echo	// TODO : Contrôler que toutes les valeurs de $unMois sont valides (chaine de caractère dans la BdD)
 	
 		// chargement du modèle contenant les fonctions génériques
 		$this->load->model('functionsLib');
@@ -87,6 +87,7 @@ class A_visiteur extends CI_Model {
 		$data['numMois'] = substr( $mois,4,2);
 		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+		$data['montant'] = $this->dataAccess->getLesFraisForfait();
 
 		$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
 	}

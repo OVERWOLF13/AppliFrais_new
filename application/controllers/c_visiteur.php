@@ -17,7 +17,7 @@ class C_visiteur extends CI_Controller {
 	public function _remap($action, $params = array())
 	{
 		// chargement du modèle d'authentification
-		$this->load->model('authentif');
+		$this->load->model('authentif'); 
 		
 		// contrôle de la bonne authentification de l'utilisateur
 		if (!$this->authentif->estConnecte()) 

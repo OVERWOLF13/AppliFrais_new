@@ -1,8 +1,7 @@
-﻿<?php
+<?php
 	$this->load->helper('url');
 	$v_path = base_url('application/views');
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -18,6 +17,7 @@
 			}
 		</script>
 		
+		<script type="text/javascript" src="<?php echo $v_path.'/templates/JavaScript/functions.js'?>"></script>
 	</head>
 
 	<body onload="setTimeout(hideNotify,7000);">
