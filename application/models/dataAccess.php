@@ -376,5 +376,10 @@ class DataAccess extends CI_Model {
 		$this->db->simple_query($req);
 		
 	}
+	
+	public function modifMontantFrais($nouveauMontantFrais, $idFrais)
+	{
+		$req = "UPDATE fraisforfait SET montant = ".$nouveauMontantFrais."WHERE id = '".$idFrais."';";
+	}
 }
 ?>

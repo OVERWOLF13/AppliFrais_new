@@ -175,6 +175,16 @@ class C_comptable extends CI_Controller {
 				$this->a_comptable->refuFiche($idVisiteur, $mois, $commentaire);
 			}
 			
+			else if ($action == 'modifMontantFrais')
+			{
+				$this->load->model('a_comptable');
+				
+				$idFrais = $params[3];
+				$nouveauMontantFrais = $_POST[$idFrais];
+				
+				$this->a_comptable->modifMontantFrais($nouveauMontantFrais, $idFrais);
+			}
+			
 			else if ($action = 'SuivreFiche')
 			{
 				$this->load->model('a_comptable');

@@ -148,4 +148,10 @@ class A_comptable extends CI_Model {
 		$data['idVisiteur'] = $idVisiteur;
 		$this->templates->load('t_comptable', 'v_comCommenterRefus', $data);
 	}
+	
+	public function modifMontantFrais($nouveauMontantFrais, $idFrais)
+	{
+		$this->dataAccess->modifMontantFrais($nouveauMontantFrais, $idFrais);
+		$this->voirFiche($idVisiteur, $mois);
+	}
 }

@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+$config['base_url']	= 'http://mon_site_web/SLAM5/AppliFrais/';
 
 /*
 |--------------------------------------------------------------------------
@@ -225,7 +225,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = 'mcjioçqzqz3';
+$config['encryption_key'] = 'mcjioï¿½qzqz3';
 
 /*
 |--------------------------------------------------------------------------

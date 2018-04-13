@@ -18,10 +18,9 @@ $this->load->helper('url');
 					$montant = $unFrais['montant'];
 
 					echo 
-					'<div>'
-					. $libelle.' : '. $quantite.
-						'<form action="'.base_url('c_comptable/modifMontantFrais').'" method="post" class="flotant">
-						<input type="number" step="any" value="'.$montant.'" min="0" name = "'.$idFrais.'"</input>
+					'<div>
+						<form action="'.base_url('c_comptable/modifMontantFrais/'.$mois.'/'.$idVisiteur.'/'.$idFrais).'" method="post" class="flotant">
+						<label for="'.$idFrais.'">'.$libelle.' : '. $quantite.'</label> <input type="number" step="0.01" value="'.$montant.'" min="0" name = "'.$idFrais.'"></input>
 						<input type="submit" value = "modifier le montant du frais" />
 						</form>
 					</div>';
@@ -31,7 +30,7 @@ $this->load->helper('url');
 		<p></p>
 	</div>  
 
-	
+	 
 	<table class="listeLegere">
 		<caption>Descriptif des éléments hors forfait</caption>
 		<tr>
