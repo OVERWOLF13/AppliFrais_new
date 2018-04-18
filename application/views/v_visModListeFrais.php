@@ -99,15 +99,15 @@
 				<legend>Nouvel élément hors forfait</legend>
 				<p>
 					<label for="txtDateHF">Date (jj/mm/aaaa): </label>
-					<input type="text" id="txtDateHF" name="dateFrais" size="10" maxlength="10" value=""  />
+					<input type="date" id="txtDateHF" name="dateFrais" size="10" maxlength="10" value=""  required />
 				</p>
 				<p>
 					<label for="txtLibelleHF">Libellé</label>
-					<input type="text" id="txtLibelleHF" name="libelle" size="60" maxlength="256" value="" />
+					<input type="text" id="txtLibelleHF" name="libelle" size="60" maxlength="256" value="" required />
 				</p>
 				<p>
 					<label for="txtMontantHF">Montant : </label>
-					<input type="text" id="txtMontantHF" name="montant" size="10" maxlength="10" value="" />
+					<input type="number" id="txtMontantHF" min="0" step = "0.01" name="montant" size="10" maxlength="10" value="" required/>
 				</p>
 			</fieldset>
 		</div>

@@ -29,16 +29,15 @@ $v_path = base_url('application/views');
 			
 			<!-- Division pour le menu -->
 			<div id="menuGauche">
-				<div id="infosUtil">
-					<h2><?php echo $this->session->userdata('prenom')."  ".$this->session->userdata('nom');  ?></h2>
-				</div>  
 				
 				<ul id="menuList">
 					<li>
 						Comptable :
 					</li>
 					<li>
-						
+						<div id="infosUtil">
+							<h2><?php echo $this->session->userdata('prenom')."  ".$this->session->userdata('nom');  ?></h2>
+						</div>  
 						<br></br>
 					</li>
 					

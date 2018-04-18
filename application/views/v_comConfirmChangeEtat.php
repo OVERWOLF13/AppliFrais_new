@@ -1,5 +1,5 @@
 <?php
-	$this->load->helper('url');
+$this->load->helper('url');
 ?>
 
 <div id="contenu">
@@ -77,5 +77,7 @@
 		?>	  
                                           
     </table>
+    
+   <form action = ""
 
 </div>

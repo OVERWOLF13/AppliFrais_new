@@ -209,9 +209,9 @@ class DataAccess extends CI_Model {
 	public function creeLigneHorsForfait($idVisiteur,$mois,$libelle,$date,$montant){
 		$this->load->model('functionsLib');
 		
-		$dateFr = $this->functionsLib->dateFrancaisVersAnglais($date);
+		//$dateFr = $this->functionsLib->dateFrancaisVersAnglais($date);
 		$req = "insert into lignefraishorsforfait 
-				values('','$idVisiteur','$mois','$libelle','$dateFr','$montant')";
+				values('','$idVisiteur','$mois','$libelle','$date','$montant')";
 		$this->db->simple_query($req);
 	}
 		
@@ -294,7 +294,7 @@ class DataAccess extends CI_Model {
 		
 		if( $idVisiteur != NULL)
 		{
-			$req = "select idVisiteur, mois, montantValide, dateModif, id, libelle
+			$req = "select idVisiteur, mois, montantValide, dateModif, id, libelle, idEtat
 			from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
 			where fichefrais.idvisiteur = '$idVisiteur'
 			order by mois desc";
@@ -305,16 +305,44 @@ class DataAccess extends CI_Model {
 		return $lesFiches;
 	}
 	
-	public function getFichesCom ($idVisiteur = NULL) {
+	public function getFichesCom () {
 		
-		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, Etat.id, libelle, idVisiteur, CommentaireRefus AS commentaire
+		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, idEtat, libelle, idVisiteur, CommentaireRefus AS commentaire
 		from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
 						 inner join utilisateur on fichefrais.idVisiteur = utilisateur.id
-		order by idVisiteur, Etat.id, mois desc";
+		where idEtat = 'CL'
+		order by idVisiteur, idEtat, mois desc;";
 		
 		$rs = $this->db->query($req);
 		$lesFiches = $rs->result_array();
 		return $lesFiches;
+	}
+	
+	public function getFichesASuivre () {
+		
+		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, idEtat, libelle, idVisiteur, CommentaireRefus AS commentaire
+		from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
+						 inner join utilisateur on fichefrais.idVisiteur = utilisateur.id
+		where idEtat = 'MP' or idEtat = 'VA'
+		order by  idEtat, idVisiteur, mois desc;";
+		
+		$rs = $this->db->query($req);
+		$lesFiches = $rs->result_array();
+		return $lesFiches;
+	}
+	
+	public function mettreEnPaiement($mois, $idVisiteur)
+	{
+		$req = "UPDATE fichefrais SET idEtat = 'MP', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
+		
+		$this->db->simple_query($req);
+	}
+	
+	public function rembourse($mois, $idVisiteur)
+	{
+		$req = "UPDATE fichefrais SET idEtat = 'RB', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
+		
+		$this->db->simple_query($req);
 	}
 	
 	/**
@@ -377,9 +405,11 @@ class DataAccess extends CI_Model {
 		
 	}
 	
-	public function modifMontantFrais($nouveauMontantFrais, $idFrais)
+	public function modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais)
 	{
-		$req = "UPDATE fraisforfait SET montant = ".$nouveauMontantFrais."WHERE id = '".$idFrais."';";
+		$req = "UPDATE lignefraisforfait SET montantApplique = '".$nouveauMontantFrais."' WHERE idVisiteur = '".$idVisiteur."' AND mois = '".$mois."' AND idFraisForfait = '".$idFrais."';";
+		
+		$this->db->simple_query($req);
 	}
 }
 ?>

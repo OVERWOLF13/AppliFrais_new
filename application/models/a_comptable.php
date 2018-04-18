@@ -33,23 +33,6 @@ class A_comptable extends CI_Model {
 		foreach ($lesMois as $unMois){
 			if(!$this->dataAccess->ExisteFiche($idVisiteur, $unMois)) $this->dataAccess->creeFiche($idVisiteur, $unMois);
 		}
-		// envoie de la vue accueil du utilisateur
-		$this->templates->load('t_comptable', 'v_comAccueil');
-	}
-	
-	/**
-	 * Liste les fiches existantes du utilisateur connecté et 
-	 * donne accès aux fonctionnalités associées
-	 *
-	 * @param $idVisiteur : l'id du utilisateur 
-	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
-	*/
-	public function ValiderFiches ($message=null)
-	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
-
-		$data['notify'] = $message;
-		$data['ValiderFiches'] = $this->dataAccess->getFichesCom();
-		$this->templates->load('t_comptable', 'v_comValidFiche', $data);
 	}
 
 	/**
@@ -58,16 +41,6 @@ class A_comptable extends CI_Model {
 	 * @param $idVisiteur : l'id du utilisateur 
 	 * @param $mois : le mois de la fiche à modifier 
 	*/
-	public function voirFiche($idVisiteur, $mois)
-	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
-
-		$data['numAnnee'] = substr( $mois,0,4);
-		$data['numMois'] = substr( $mois,4,2);
-		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
-		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
-
-		$this->templates->load('t_comptable', 'v.comVoirListeFrais', $data);
-	}
 
 	/** 
 	 * Signe une fiche de frais en changeant son état
@@ -131,27 +104,43 @@ class A_comptable extends CI_Model {
 	public function validFiche($mois, $idVisiteur)
 	{
 		$this->dataAccess->validFiche($idVisiteur, $mois);
-		$this->ValiderFiches();
+		
 		
 	}
 	
 	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
-		$commentaire = $_POST['commentaire'];
 		$this->dataAccess->refuFiche($idVisiteur, $mois, $commentaire);
-		$this->ValiderFiches();
 	}
 	
-	public function commentrefuFiche($mois, $idVisiteur)
+	public function modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais)
 	{
-		$data['mois'] = $mois;
-		$data['idVisiteur'] = $idVisiteur;
-		$this->templates->load('t_comptable', 'v_comCommenterRefus', $data);
+		$this->dataAccess->modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais);
 	}
 	
-	public function modifMontantFrais($nouveauMontantFrais, $idFrais)
+	public function SuivreFiches()
 	{
-		$this->dataAccess->modifMontantFrais($nouveauMontantFrais, $idFrais);
-		$this->voirFiche($idVisiteur, $mois);
+		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
+		return $data;
+	}
+	
+	public function mettreEnPaiement($mois, $idVisiteur)
+	{
+		$this->dataAccess->mettreEnPaiement($mois, $idVisiteur);
+		
+		$data['notify'] = "La fiche a bien été mise en paiement";
+		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
+		
+		return $data;
+	}
+	
+	public function rembourse($mois, $idVisiteur)
+	{
+		$this->dataAccess->rembourse($mois, $idVisiteur);
+		
+		$data['notify'] = "La fiche a bien été mise en paiement";
+		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
+		
+		return $data;
 	}
 }

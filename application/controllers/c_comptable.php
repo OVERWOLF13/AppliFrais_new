@@ -45,16 +45,19 @@ class C_comptable extends CI_Controller {
 				// on n'est pas en mode "modification d'une fiche"
 				$this->session->unset_userdata('mois');
 
-				$this->a_comptable->accueil();
+				// envoie de la vue accueil du utilisateur
+				$this->templates->load('t_comptable', 'v_comAccueil');
 			}
 			elseif ($action == 'ValiderFiches')		// ValiderFiches demandé : on active la fonction ValiderFiches du modèle comptable
 			{
 				$this->load->model('a_comptable');
+				
+				$data['ValiderFiches'] = $this->dataAccess->getFichesCom();
+				
+				$this->templates->load('t_comptable', 'v_comValidFiche', $data);
 
 				// on n'est pas en mode "modification d'une fiche"
 				$this->session->unset_userdata('mois');
-
-				$this->a_comptable->ValiderFiches();
 			}
 			elseif ($action == 'deconnecter')	// deconnecter demandé : on active la fonction deconnecter du modèle authentif
 			{
@@ -74,8 +77,15 @@ class C_comptable extends CI_Controller {
 				$this->session->set_userdata('mois', $mois);
 				// obtention de l'id de l'utilisateur à qui appartien la fiche
 				$idVisiteur = $params[1];
-
-				$this->a_comptable->voirFiche($idVisiteur, $mois);
+				
+				$data['mois'] = $mois;
+				$data['idVisiteur'] = $idVisiteur;
+				$data['numAnnee'] = substr( $mois,0,4);
+				$data['numMois'] = substr( $mois,4,2);
+				$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
+				$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+				
+				$this->templates->load('t_comptable', 'v.comVoirListeFrais', $data);
 			}
 			
 			
@@ -146,20 +156,29 @@ class C_comptable extends CI_Controller {
 				$mois= $params[0];
 				$idVisiteur = $params[1];
 				
-				//retours au menu de validation				
+				//on valide la fiche
 				$this->a_comptable->validFiche($mois, $idVisiteur);
+				
+				//retours au menu de validation
+				$data['notify'] = "La fiche a bien été validée";
+				$data['ValiderFiches'] = $this->dataAccess->getFichesCom();
+				
+				$this->templates->load('t_comptable', 'v_comValidFiche', $data);
+				
+				// on n'est pas en mode "modification d'une fiche"
+				$this->session->unset_userdata('mois');
 			}
 			
 			
 			elseif ($action == 'commentrefuFiche')
 			{
-				$this->load->model('a_comptable');
-				
 				// obtention de l'id du utilisateur et du mois concerné
 				$mois = $params[0];
 				$idVisiteur = $params[1];
 				
-				$this->a_comptable->commentrefuFiche($mois, $idVisiteur);
+				$data['mois'] = $mois;
+				$data['idVisiteur'] = $idVisiteur;
+				$this->templates->load('t_comptable', 'v_comCommenterRefus', $data);
 			}
 			
 			elseif ($action == 'refuFiche')
@@ -173,23 +192,109 @@ class C_comptable extends CI_Controller {
 				
 				// méthode pour valider la fiche de frais
 				$this->a_comptable->refuFiche($idVisiteur, $mois, $commentaire);
+				
+				//retours au menu de validation
+				$data['notify'] = "La fiche a bien été refusé";
+				$data['ValiderFiches'] = $this->dataAccess->getFichesCom();
+				
+				$this->templates->load('t_comptable', 'v_comValidFiche', $data);
+				
+				// on n'est pas en mode "modification d'une fiche"
+				$this->session->unset_userdata('mois');
+				
 			}
 			
 			else if ($action == 'modifMontantFrais')
 			{
 				$this->load->model('a_comptable');
 				
-				$idFrais = $params[3];
+				$mois = $params[0];
+				$idVisiteur = $params[1];
+				$idFrais = $params[2];
 				$nouveauMontantFrais = $_POST[$idFrais];
 				
-				$this->a_comptable->modifMontantFrais($nouveauMontantFrais, $idFrais);
+				$this->a_comptable->modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais);
+				
+				
+				// mémorisation du mode modification en cours
+				// on mémorise le mois de la fiche en cours de modification
+				$this->session->set_userdata('mois', $mois);
+				
+				$data['notify'] = "Le montant du frais a bien été modifié";
+				$data['mois'] = $mois;
+				$data['idVisiteur'] = $params[1];
+				$data['numAnnee'] = substr( $mois,0,4);
+				$data['numMois'] = substr( $mois,4,2);
+				$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
+				$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+				
+				$this->templates->load('t_comptable', 'v.comVoirListeFrais', $data);
+				
 			}
 			
-			else if ($action = 'SuivreFiche')
+			else if ($action == 'SuivreFiches')
 			{
 				$this->load->model('a_comptable');
 				
+				$data = $this->a_comptable->SuivreFiches();
 				
+				$this->templates->load('t_comptable', 'v_comSuivreFiches', $data);
+			}
+			
+			else if ($action == 'confirmChangeEtat')
+			{
+				
+				$this->load->model('a_comptable');
+				
+				// obtention du mois de la fiche à modifier qui doit avoir été transmis
+				// en second paramètre
+				$mois = $params[0];
+				// mémorisation du mode modification en cours
+				// on mémorise le mois de la fiche en cours de modification
+				$this->session->set_userdata('mois', $mois);
+				// obtention de l'id de l'utilisateur à qui appartien la fiche
+				$idVisiteur = $params[1];
+				
+				
+				$nouvelEtat = $params[2];
+				
+				
+				$data['nouvelEtat'] = $nouvelEtat;
+				$data['mois'] = $mois;
+				$data['idVisiteur'] = $idVisiteur;
+				$data['numAnnee'] = substr( $mois,0,4);
+				$data['numMois'] = substr( $mois,4,2);
+				$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
+				$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+				
+				
+				$this->templates->load('t_comptable', 'v_comConfirmChangeEtat', $data);
+			}
+			
+			else if($action == 'mettreEnPaiement')
+			{
+				$this->load->model('a_comptable');
+				
+				$mois = $params[0];
+				$idVisiteur = $params[1];
+				
+				$data = $this->a_comptable->mettreEnPaiement($mois, $idVisiteur);
+				
+				
+				$this->templates->load('t_comptable', 'v_comSuivreFiches', $data);
+			}
+			
+			else if($action == 'rembourse')
+			{
+				$this->load->model('a_comptable');
+				
+				$mois = $params[0];
+				$idVisiteur = $params[1];
+				
+				$data = $this->a_comptable->rembourse($mois, $idVisiteur);
+				
+				
+				$this->templates->load('t_comptable', 'v_comSuivreFiches', $data);
 			}
 			
 			else	// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404

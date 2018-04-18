@@ -80,7 +80,7 @@ class C_visiteur extends CI_Controller {
 			}
 			elseif ($action == 'modFiche')		// modFiche demandé : on active la fonction modFiche du modèle authentif
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
-			
+
 				$this->load->model('a_visiteur');
 
 				// obtention du mois de la fiche à modifier qui doit avoir été transmis

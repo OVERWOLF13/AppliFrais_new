@@ -67,6 +67,7 @@ class A_visiteur extends CI_Model {
 		$data['numMois'] = substr( $mois,4,2);
 		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
+		$data['montant'] = $this->dataAccess->getLesFraisForfait();
 
 		$this->templates->load('t_visiteur', 'v_visVoirListeFrais', $data);
 	}

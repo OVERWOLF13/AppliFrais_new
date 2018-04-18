@@ -6,7 +6,7 @@ $this->load->helper('url');
 	<h2>Fiche de frais du mois <?php echo $numMois."-".$numAnnee; ?></h2>
 					
 	<div class="corpsForm">
-	  
+	  <?php if(!empty($notify)) echo '<p id="notify" >'.$notify.'</p>';?>
 		<fieldset>
 			<legend>Eléments forfaitisés</legend>
 			<?php
@@ -17,7 +17,7 @@ $this->load->helper('url');
 					$quantite = $unFrais['quantite'];
 					$montant = $unFrais['montant'];
 
-					echo 
+					echo
 					'<div>
 						<form action="'.base_url('c_comptable/modifMontantFrais/'.$mois.'/'.$idVisiteur.'/'.$idFrais).'" method="post" class="flotant">
 						<label for="'.$idFrais.'">'.$libelle.' : '. $quantite.'</label> <input type="number" step="0.01" value="'.$montant.'" min="0" name = "'.$idFrais.'"></input>
