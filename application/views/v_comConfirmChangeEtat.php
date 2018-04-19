@@ -78,6 +78,20 @@ $this->load->helper('url');
                                           
     </table>
     
-   <form action = ""
-
+	<?php
+	
+	$libEtat = '';
+	
+	if($nouvelEtat == 'mettreEnPaiement')
+		$libEtat = 'Mise en paiement';
+	else if($nouvelEtat == 'rembourse')
+		$libEtat = 'Remboursée';
+	
+	echo '
+	<form action="'.base_url('c_comptable/'.$nouvelEtat.'/'.$mois.'/'.$idVisiteur).'" method="post">
+	Voulez-vous vraiment passer la fiche à l\'état "'.$libEtat.'" ?</br>
+	<input type="submit" name="confirmation" value="Oui">
+	<input type="submit" name="confirmation" value="Non">
+	</form>';
+	?>
 </div>

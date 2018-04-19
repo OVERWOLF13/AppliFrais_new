@@ -54,6 +54,21 @@ class A_comptable extends CI_Model {
 
 	    $this->dataAccess->signeFiche($idVisiteur, $mois);
 	}
+	
+	public function getLesLignesHorsForfait($idVisiteur,$mois)
+	{
+		return $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
+	}
+	
+	public function getLesLignesForfait($idVisiteur,$mois)
+	{
+		return $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+	}
+	
+	public function getFichesCom()
+	{
+		return $this->dataAccess->getFichesCom();
+	}
 
 	/**
 	 * Modifie les quantités associées aux frais forfaitisés dans une fiche donnée
@@ -120,27 +135,16 @@ class A_comptable extends CI_Model {
 	
 	public function SuivreFiches()
 	{
-		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
-		return $data;
+		return $this->dataAccess->getFichesASuivre();
 	}
 	
 	public function mettreEnPaiement($mois, $idVisiteur)
 	{
 		$this->dataAccess->mettreEnPaiement($mois, $idVisiteur);
-		
-		$data['notify'] = "La fiche a bien été mise en paiement";
-		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
-		
-		return $data;
 	}
 	
 	public function rembourse($mois, $idVisiteur)
 	{
 		$this->dataAccess->rembourse($mois, $idVisiteur);
-		
-		$data['notify'] = "La fiche a bien été mise en paiement";
-		$data['LesFichesASuivre'] = $this->dataAccess->getFichesASuivre();
-		
-		return $data;
 	}
 }

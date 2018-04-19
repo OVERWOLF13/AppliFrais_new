@@ -149,8 +149,7 @@ class C_visiteur extends CI_Controller {
 				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" ajoutée ...');				
 			}
 			elseif ($action == 'supprFrais') // suppprLigneFrais demandé : on active la fonction suppprLigneFrais du modèle utilisateur ...
-			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
-				// TODO : dans la dynamique de l'application, contrôler que l'on vient bien de modFiche
+			{
 			
 				$this->load->model('a_visiteur');
 
@@ -165,7 +164,7 @@ class C_visiteur extends CI_Controller {
 				// ... et on revient en modification de la fiche
 				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" supprimée ...');				
 			}
-			else								// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404
+			else	// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404
 			{
 				show_404();
 			}
