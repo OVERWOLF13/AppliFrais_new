@@ -32,7 +32,7 @@
 						echo 
 						'<tr>
 							<td> <label for="'.$idFrais.'">'.$libelle.'</label></td>';
-						echo	'<td> <input type="number" min="0" class="inputQuantite" id="input_'.$idFrais.'" name="'.$idFrais.'" size="10" maxlength="5" value="'.$quantite.'" onchange = "calculMontantFrais(input_'.$idFrais.', '.$montant.','.$nb.')" onload = "calculMontantFrais(input_'.$idFrais.', '.$montant.', '.$nb.')" /></td>
+						echo	'<td> <input type="number" min="0" class="inputQuantite" id="input_'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" onchange = "calculMontantFrais(input_'.$idFrais.', '.$montant.','.$nb.')" onload = "calculMontantFrais(input_'.$idFrais.', '.$montant.', '.$nb.')" /></td>
 								 <td id = td_'.$idFrais.'>'.$montant.'</td>
 								 <td id="montant_Frais'.$nb.'" name="montant_Frais'.$nb.'"></td>
 						</tr>';

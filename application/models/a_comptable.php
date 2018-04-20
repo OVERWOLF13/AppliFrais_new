@@ -116,33 +116,69 @@ class A_comptable extends CI_Model {
 	    $this->dataAccess->supprimerLigneHorsForfait($idLigneFrais);
 	}
 	
+	/**
+	 * Valide  une fiche de frais
+	 * 
+	 * @param $mois
+	 * @param $idVisiteur
+	 */
 	public function validFiche($mois, $idVisiteur)
 	{
 		$this->dataAccess->validFiche($idVisiteur, $mois);
-		
-		
 	}
 	
+	/**
+	 * Refuse une fiche
+	 * 
+	 * @param $idVisiteur
+	 * @param $mois
+	 * @param $commentaire
+	 */
 	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
 		$this->dataAccess->refuFiche($idVisiteur, $mois, $commentaire);
 	}
 	
+	/**
+	 * Modifie le montant du frais
+	 * 
+	 * @param $mois
+	 * @param $idVisiteur
+	 * @param $nouveauMontantFrais
+	 * @param $idFrais
+	 */
 	public function modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais)
 	{
 		$this->dataAccess->modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais);
 	}
 	
+	/**
+	 * Donne les fiches à suivre
+	 * 
+	 * @return FichesASuivre
+	 */
 	public function SuivreFiches()
 	{
 		return $this->dataAccess->getFichesASuivre();
 	}
 	
+	/**
+	 * Met la fiche à l'état "Mise en paiement"
+	 * 
+	 * @param $mois
+	 * @param $idVisiteur
+	 */
 	public function mettreEnPaiement($mois, $idVisiteur)
 	{
 		$this->dataAccess->mettreEnPaiement($mois, $idVisiteur);
 	}
 	
+	/**
+	 * Met la fiche à l'état "Remboursée"
+	 * 
+	 * @param $mois
+	 * @param $idVisiteur
+	 */
 	public function rembourse($mois, $idVisiteur)
 	{
 		$this->dataAccess->rembourse($mois, $idVisiteur);

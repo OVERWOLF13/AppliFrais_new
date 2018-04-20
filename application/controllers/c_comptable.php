@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Contrôleur du module UTILISATEUR de l'application
+ * Contrôleur du module COMPTABLE de l'application
 */
 class C_comptable extends CI_Controller {
 
@@ -11,7 +11,7 @@ class C_comptable extends CI_Controller {
 	 * le comportement habituel de la fonction index. Grâce à _remap, on dispose
 	 * d'une fonction unique capable d'accepter un nombre variable de paramètres.
 	 *
-	 * @param $action : l'action demandée par le utilisateur
+	 * @param $action : l'action demandée par le comptable
 	 * @param $params : les éventuels paramètres transmis pour la réalisation de cette action
 	*/
 	public function _remap($action, $params = array())
@@ -19,15 +19,15 @@ class C_comptable extends CI_Controller {
 		// chargement du modèle d'authentification
 		$this->load->model('authentif');
 		
-		// contrôle de la bonne authentification de l'utilisateur
+		// contrôle de la bonne authentification de le comptable
 		if (!$this->authentif->estConnecte()) 
 		{
-			// l'utilisateur n'est pas authentifié, on envoie la vue de connexion
+			// le comptable n'est pas authentifié, on envoie la vue de connexion
 			$data = array();
 			$this->templates->load('t_connexion', 'v_connexion', $data);
 		}
 		
-		//si l'utilisateur n'est pas un comptable, on renvoie sur le controlleur c_default
+		//si le comptable n'est pas un comptable, on renvoie sur le controlleur c_default
 		else if($this->session->userdata('statut') != 'comptable')
 		{
 			$this->load->helper('url');
@@ -46,7 +46,7 @@ class C_comptable extends CI_Controller {
 				// on n'est pas en mode "modification d'une fiche"
 				$this->session->unset_userdata('mois');
 
-				// envoie de la vue accueil du utilisateur
+				// envoie de la vue accueil du comptable
 				$this->templates->load('t_comptable', 'v_comAccueil');
 			}
 			
@@ -86,7 +86,7 @@ class C_comptable extends CI_Controller {
 				// mémorisation du mode modification en cours on mémorise le mois de la fiche en cours de modification
 				$this->session->set_userdata('mois', $mois);
 				
-				// obtention de l'id de l'utilisateur à qui appartien la fiche
+				// obtention de l'id de le comptable à qui appartien la fiche
 				$idVisiteur = $params[1];
 				
 				//On passe les différents paramètres nécessaires à la vue
@@ -119,7 +119,7 @@ class C_comptable extends CI_Controller {
 				//on charge le modèle a_comptable
 				$this->load->model('a_comptable');
 				
-				// obtention de l'id du utilisateur
+				// obtention de l'id du comptable
 				$mois= $params[0];
 				
 				// obtention de l'id du visiteur

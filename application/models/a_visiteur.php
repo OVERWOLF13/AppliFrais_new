@@ -12,7 +12,7 @@ class A_visiteur extends CI_Model {
     }
 
 	/**
-	 * Accueil du utilisateur
+	 * Accueil du visiteur
 	 * La fonction intègre un mécanisme de contrôle d'existence des 
 	 * fiches de frais sur les 6 derniers mois. 
 	 * Si l'une d'elle est absente, elle est créée
@@ -26,39 +26,40 @@ class A_visiteur extends CI_Model {
 		// obtention de la liste des 6 derniers mois (y compris celui ci)
 		$lesMois = $this->functionsLib->getSixDerniersMois();
 		
-		// obtention de l'id de l'utilisateur mémorisé en session
+		// obtention de l'id de le visiteur mémorisé en session
 		$idVisiteur = $this->session->userdata('idUser');
 		
 		// contrôle de l'existence des 6 dernières fiches et création si nécessaire
 		foreach ($lesMois as $unMois){
 			if(!$this->dataAccess->ExisteFiche($idVisiteur, $unMois)) $this->dataAccess->creeFiche($idVisiteur, $unMois);
 		}
-		// envoie de la vue accueil du utilisateur
+		// envoie de la vue accueil du visiteur
 		$this->templates->load('t_visiteur', 'v_visAccueil');
 	}
 	
 	/**
-	 * Liste les fiches existantes du utilisateur connecté et 
+	 * Liste les fiches existantes du visiteur connecté et 
 	 * donne accès aux fonctionnalités associées
 	 *
-	 * @param $idVisiteur : l'id du utilisateur 
-	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
+	 * @param $idVisiteur : l'id du visiteur 
+	 * @param $message : message facultatif destiné à notifier le visiteur du résultat d'une action précédemment exécutée
 	*/
 	public function mesFiches ($idVisiteur, $message=null)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
-	
-		$idVisiteur = $this->session->userdata('idUser');
-
+		
 		$data['notify'] = $message;
 		$data['mesFiches'] = $this->dataAccess->getFiches($idVisiteur);		
-		$this->templates->load('t_visiteur', 'v_visMesFiches', $data);	
+		
+		return $data;
 	}	
 
 	/**
 	 * Présente le détail de la fiche sélectionnée 
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche à modifier 
+	 * 
+	 * @return $data : retourne les données nécessaires à la vue
 	*/
 	public function voirFiche($idVisiteur, $mois)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
@@ -69,16 +70,18 @@ class A_visiteur extends CI_Model {
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
 		$data['montant'] = $this->dataAccess->getLesFraisForfait();
 
-		$this->templates->load('t_visiteur', 'v_visVoirListeFrais', $data);
+		return $data;
 	}
 
 	/**
 	 * Présente le détail de la fiche sélectionnée et donne 
 	 * accés à la modification du contenu de cette fiche.
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche à modifier 
-	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
+	 * @param $message : message facultatif destiné à notifier le visiteur du résultat d'une action précédemment exécutée
+	 * 
+	 * @return $data : les données nécessaires à la vue
 	*/
 	public function modFiche($idVisiteur, $mois, $message=null)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
@@ -90,13 +93,13 @@ class A_visiteur extends CI_Model {
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
 		$data['montant'] = $this->dataAccess->getLesFraisForfait();
 
-		$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
+		return $data;
 	}
 
 	/**
 	 * Signe une fiche de frais en changeant son état
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche à signer
 	*/
 	public function signeFiche($idVisiteur, $mois)
@@ -109,7 +112,7 @@ class A_visiteur extends CI_Model {
 	/**
 	 * Modifie les quantités associées aux frais forfaitisés dans une fiche donnée
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche concernée
 	 * @param $lesFrais : les quantités liées à chaque type de frais, sous la forme d'un tableau
 	*/
@@ -124,7 +127,7 @@ class A_visiteur extends CI_Model {
 	/**
 	 * Ajoute une ligne de frais hors forfait dans une fiche donnée
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche concernée
 	 * @param $lesFrais : les quantités liées à chaque type de frais, sous la forme d'un tableau
 	*/
@@ -142,7 +145,7 @@ class A_visiteur extends CI_Model {
 	/**
 	 * Supprime une ligne de frais hors forfait dans une fiche donnée
 	 * 
-	 * @param $idVisiteur : l'id du utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche concernée
 	 * @param $idLigneFrais : l'id de la ligne à supprimer
 	*/

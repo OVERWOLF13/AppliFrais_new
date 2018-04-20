@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Contrôleur du module UTILISATEUR de l'application
+ * Contrôleur du module VISITEUR de l'application
 */
 class C_visiteur extends CI_Controller {
 
@@ -55,7 +55,9 @@ class C_visiteur extends CI_Controller {
 				$this->session->unset_userdata('mois');
 
 				$idVisiteur = $this->session->userdata('idUser');
-				$this->a_visiteur->mesFiches($idVisiteur);
+				$data = $this->a_visiteur->mesFiches($idVisiteur);
+				
+				$this->templates->load('t_visiteur', 'v_visMesFiches', $data);	
 			}
 			elseif ($action == 'deconnecter')	// deconnecter demandé : on active la fonction deconnecter du modèle authentif
 			{
@@ -76,7 +78,9 @@ class C_visiteur extends CI_Controller {
 				// obtention de l'id utilisateur courant
 				$idVisiteur = $this->session->userdata('idUser');
 
-				$this->a_visiteur->voirFiche($idVisiteur, $mois);
+				$data = $this->a_visiteur->voirFiche($idVisiteur, $mois);
+				
+				$this->templates->load('t_visiteur', 'v_visVoirListeFrais', $data);
 			}
 			elseif ($action == 'modFiche')		// modFiche demandé : on active la fonction modFiche du modèle authentif
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
@@ -91,8 +95,11 @@ class C_visiteur extends CI_Controller {
 				$this->session->set_userdata('mois', $mois);
 				// obtention de l'id utilisateur courant
 				$idVisiteur = $this->session->userdata('idUser');
-
-				$this->a_visiteur->modFiche($idVisiteur, $mois);
+				
+				//on va cherche les données
+				$data = $this->a_visiteur->modFiche($idVisiteur, $mois);
+				
+				$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
 			}
 			elseif ($action == 'signeFiche') 	// signeFiche demandé : on active la fonction signeFiche du modèle utilisateur ...
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
@@ -103,10 +110,13 @@ class C_visiteur extends CI_Controller {
 				$mois = $params[0];
 				// obtention de l'id utilisateur courant et du mois concerné
 				$idVisiteur = $this->session->userdata('idUser');
+				
 				$this->a_visiteur->signeFiche($idVisiteur, $mois);
-
+				
 				// ... et on revient à mesFiches
-				$this->a_visiteur->mesFiches($idVisiteur, "La fiche $mois a été signée. <br/>Pensez à envoyer vos justificatifs afin qu'elle soit traitée par le service comptable rapidement.");
+				$data = $this->a_visiteur->mesFiches($idVisiteur, "La fiche". $mois ."a été signée. <br/>Pensez à envoyer vos justificatifs afin qu'elle soit traitée par le service comptable rapidement.");
+				
+				$this->templates->load('t_visiteur', 'v_visMesFiches', $data);	
 			}
 			elseif ($action == 'majForfait') // majFraisForfait demandé : on active la fonction majFraisForfait du modèle utilisateur ...
 			{	// TODO : conrôler que l'obtention des données postées ne rend pas d'erreurs
@@ -120,13 +130,16 @@ class C_visiteur extends CI_Controller {
 
 				// obtention des données postées
 				$lesFrais = $this->input->post('lesFrais');
-
+				
+				//on actualise les forfaits
 				$this->a_visiteur->majForfait($idVisiteur, $mois, $lesFrais);
 
 				// ... et on revient en modification de la fiche
-				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Modification(s) des éléments forfaitisés enregistrée(s) ...');
+				$data = $this->a_visiteur->modFiche($idVisiteur, $mois, 'Modification(s) des éléments forfaitisés enregistrée(s) ...');
+				
+				$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
 			}
-			elseif ($action == 'ajouteFrais') // ajouteLigneFrais demandé : on active la fonction ajouteLigneFrais du modèle utilisateur ...
+			elseif ($action == 'ajouteFrais') // ajouteLigneFrais demandé : ajoute un frait hors forfait
 			{	// TODO : conrôler que l'obtention des données postées ne rend pas d'erreurs
 				// TODO : dans la dynamique de l'application, contrôler que l'on vient bien de modFiche
 				
@@ -142,13 +155,17 @@ class C_visiteur extends CI_Controller {
 					'libelle' => $this->input->post('libelle'),
 					'montant' => $this->input->post('montant')
 				);
-
+				
+				//ajoute le frais
 				$this->a_visiteur->ajouteFrais($idVisiteur, $mois, $uneLigne);
-
+				
+				//obtention des données
+				$data = $this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" ajoutée ...');	
+				
 				// ... et on revient en modification de la fiche
-				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" ajoutée ...');				
+				$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
 			}
-			elseif ($action == 'supprFrais') // suppprLigneFrais demandé : on active la fonction suppprLigneFrais du modèle utilisateur ...
+			elseif ($action == 'supprFrais') // suppprLigneFrais demandé : supprime un frais hors forfait
 			{
 			
 				$this->load->model('a_visiteur');
@@ -160,9 +177,12 @@ class C_visiteur extends CI_Controller {
 				// Quel est l'id de la ligne à supprimer : doit avoir été transmis en second paramètre
 				$idLigneFrais = $params[0];
 				$this->a_visiteur->supprLigneFrais($idVisiteur, $mois, $idLigneFrais);
-
+				
+				//obtention des données
+				$data = $this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" supprimée ...');
+				
 				// ... et on revient en modification de la fiche
-				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" supprimée ...');				
+				$this->templates->load('t_visiteur', 'v_visModListeFrais', $data);
 			}
 			else	// dans tous les autres cas, on envoie la vue par défaut pour l'erreur 404
 			{

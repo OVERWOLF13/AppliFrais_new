@@ -183,17 +183,14 @@ class DataAccess extends CI_Model {
 
 	/**
 	 * Signe une fiche de frais en modifiant son état de "CR" à "CL"
-	 * Ne fait rien si l'état initial n'est pas "CR"
 	 * 
 	 * @param $idVisiteur 
 	 * @param $mois sous la forme aaaamm
 	*/
 	public function signeFiche($idVisiteur,$mois){
-		//met à 'CL' son champs idEtat
-		$laFiche = $this->getLesInfosFicheFrais($idVisiteur,$mois);
-		if($laFiche['idEtat']=='CR'){
-				$this->majEtatFicheFrais($idVisiteur, $mois,'CL');
-		}
+		$req = "UPDATE fichefrais SET idEtat = 'CL', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
+		
+		$this->db->simple_query($req);
 	}
 
 	/**
@@ -272,39 +269,26 @@ class DataAccess extends CI_Model {
 	}
 
 	/**
-	 * Modifie l'état et la date de modification d'une fiche de frais
-	 * 
-	 * @param $idVisiteur 
-	 * @param $mois sous la forme aaaamm
-	 * @param $etat : le nouvel état de la fiche 
-	 */
-	public function majEtatFicheFrais($idVisiteur,$mois,$etat){
-		$req = "update ficheFrais 
-				set idEtat = '$etat', dateModif = now() 
-				where fichefrais.idvisiteur ='$idVisiteur' and fichefrais.mois = '$mois'";
-		$this->db->simple_query($req);
-	}
-	
-	/**
 	 * Obtient toutes les fiches (sans détail) d'un utilisateur donné 
 	 * 
-	 * @param $idVisiteur 
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
 	*/
 	public function getFiches ($idVisiteur = NULL) {
 		
-		if( $idVisiteur != NULL)
-		{
 			$req = "select idVisiteur, mois, montantValide, dateModif, id, libelle, idEtat
 			from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
 			where fichefrais.idvisiteur = '$idVisiteur'
 			order by mois desc";
-		}
 		
 		$rs = $this->db->query($req);
 		$lesFiches = $rs->result_array();
 		return $lesFiches;
 	}
-	
+	/**
+	 * Obtient le fiches signées
+	 * 
+	 * @return Les fiches signées sous forme d'un tableau associatif
+	 */
 	public function getFichesCom () {
 		
 		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, idEtat, libelle, idVisiteur, CommentaireRefus AS commentaire
@@ -318,6 +302,11 @@ class DataAccess extends CI_Model {
 		return $lesFiches;
 	}
 	
+	/**
+	 * Obtient les foches à suivres (celles validées ou mises en paiement)
+	 * 
+	 * @return Les fiche à suivre sous la forme d'un tableau associatif
+	 */
 	public function getFichesASuivre () {
 		
 		$req = "select concat(nom, ' ', prenom) as nomVisiteur, mois, montantValide, dateModif, idEtat, libelle, idVisiteur, CommentaireRefus AS commentaire
@@ -331,6 +320,12 @@ class DataAccess extends CI_Model {
 		return $lesFiches;
 	}
 	
+	/**
+	 * Met la fiche en paiement
+	 * 
+	 * @param $mois : mois sous la forme aaaamm
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 */
 	public function mettreEnPaiement($mois, $idVisiteur)
 	{
 		$req = "UPDATE fichefrais SET idEtat = 'MP', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
@@ -338,6 +333,12 @@ class DataAccess extends CI_Model {
 		$this->db->simple_query($req);
 	}
 	
+	/**
+	 * Met la fiche à l'état rembousée
+	 * 
+	 * @param $mois : mois sous la forme aaaamm
+	 * $param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 */
 	public function rembourse($mois, $idVisiteur)
 	{
 		$req = "UPDATE fichefrais SET idEtat = 'RB', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
@@ -348,8 +349,8 @@ class DataAccess extends CI_Model {
 	/**
 	 * Calcule le montant total de la fiche pour un utilisateur et un mois donnés
 	 * 
-	 * @param $idVisiteur 
-	 * @param $mois
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 * @param $mois : mois sous la forme aaaamm
 	 * @return le montant total de la fiche
 	*/
 	public function totalFiche ($idVisiteur, $mois) {
@@ -389,6 +390,12 @@ class DataAccess extends CI_Model {
 		$this->db->simple_query($req);
 	}
 	
+	/**
+	 * Passe la fiche à l'état Validée
+	 * 
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 * @param $mois : mois sous la forme aaaamm
+	 */
 	public function validFiche($idVisiteur, $mois)
 	{
 		$req = "UPDATE fichefrais SET idEtat = 'VA', dateModif = NOW() WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
@@ -397,6 +404,13 @@ class DataAccess extends CI_Model {
 		
 	}
 	
+	/**
+	 * Passe la fiche à l'état Refusée
+	 * 
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 * @param $mois : mois sous la forme aaaamm
+	 * @param $commentaire : le commentaire de refus
+	 */
 	public function refuFiche($idVisiteur, $mois, $commentaire)
 	{
 		$req = "UPDATE fichefrais SET idEtat = 'RE', dateModif = NOW(), CommentaireRefus = '$commentaire' WHERE fichefrais.idVisiteur = '$idVisiteur' AND fichefrais.mois = '$mois'";
@@ -405,6 +419,14 @@ class DataAccess extends CI_Model {
 		
 	}
 	
+	/**
+	 * Mofifie le montant d'un frais sur une fiche
+	 * 
+	 * @param $mois : le mois de la fiche
+	 * @param $idVisiteur : l'id du visiteur à qui appartient la fiche
+	 * @param $nouveauMontantFrais : le nouveau montant du frais
+	 * @param $idFrais : l'id du frais
+	 */
 	public function modifMontantFrais($mois, $idVisiteur, $nouveauMontantFrais, $idFrais)
 	{
 		$req = "UPDATE lignefraisforfait SET montantApplique = '".$nouveauMontantFrais."' WHERE idVisiteur = '".$idVisiteur."' AND mois = '".$mois."' AND idFraisForfait = '".$idFrais."';";
