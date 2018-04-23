@@ -24,7 +24,7 @@ class C_comptable extends CI_Controller {
 		{
 			// le comptable n'est pas authentifié, on envoie la vue de connexion
 			$data = array();
-			$this->templates->load('t_connexion', 'v_connexion', $data);
+			$this->templates->load('t_connexion', 'connexion', $data);
 		}
 		
 		//si le comptable n'est pas un comptable, on renvoie sur le controlleur c_default
@@ -75,7 +75,7 @@ class C_comptable extends CI_Controller {
 				$this->authentif->deconnecter();
 			}
 			
-			elseif ($action == 'voirFiche')		// voirFiche demandé : on visualise la fiche avec possibilité d'actualiser les montants des frais
+			elseif ($action == 'voirFiche')		// voirFiche demandé : on visualise la fiche en lecture seule
 			{
 				//charge le modèle a_comptable
 				$this->load->model('a_comptable');
@@ -111,7 +111,46 @@ class C_comptable extends CI_Controller {
 				
 				
 				//affiche la vue
-				$this->templates->load('t_comptable', 'v.comVoirListeFrais', $data);
+				$this->templates->load('t_comptable', 'v_comVoirListeFrais', $data);
+			}
+			
+			elseif ($action == 'modifierFrais')		// voirFiche demandé : on visualise la fiche avec possibilité d'actualiser les montants des frais
+			{
+				//charge le modèle a_comptable
+				$this->load->model('a_comptable');
+				
+				// obtention du mois de la fiche à modifier qui doit avoir été transmis en second paramètre
+				$mois = $params[0];
+				
+				// mémorisation du mode modification en cours on mémorise le mois de la fiche en cours de modification
+				$this->session->set_userdata('mois', $mois);
+				
+				// obtention de l'id de le comptable à qui appartien la fiche
+				$idVisiteur = $params[1];
+				
+				//On passe les différents paramètres nécessaires à la vue
+				
+				//le mois de la fiche
+				$data['mois'] = $mois;
+				
+				//l'id du visiteur
+				$data['idVisiteur'] = $idVisiteur;
+				
+				//l'année de la fiche
+				$data['numAnnee'] = substr( $mois,0,4);
+				
+				//le mois de la fiche
+				$data['numMois'] = substr( $mois,4,2);
+				
+				//les frais hors forfais
+				$data['lesFraisHorsForfait'] = $this->a_comptable->getLesLignesHorsForfait($idVisiteur,$mois);
+				
+				//les frais forfaitisés
+				$data['lesFraisForfait'] = $this->a_comptable->getLesLignesForfait($idVisiteur,$mois);
+				
+				
+				//affiche la vue
+				$this->templates->load('t_comptable', 'v_comModMontantFrais', $data);
 			}
 			
 			elseif ($action == 'validFiche') //action validFiche demandé : on passe la fiche à l'état validé, et on retourne à la vue permettant de valider ou refuser des fiches
@@ -234,7 +273,7 @@ class C_comptable extends CI_Controller {
 				
 				
 				//on affiche la vue
-				$this->templates->load('t_comptable', 'v.comVoirListeFrais', $data);
+				$this->templates->load('t_comptable', 'v_comModMontantFrais', $data);
 				
 			}
 			

@@ -275,7 +275,7 @@ class DataAccess extends CI_Model {
 	*/
 	public function getFiches ($idVisiteur = NULL) {
 		
-			$req = "select idVisiteur, mois, montantValide, dateModif, id, libelle, idEtat
+			$req = "select idVisiteur, mois, montantValide, dateModif, id, libelle, idEtat, CommentaireRefus
 			from  fichefrais inner join Etat on ficheFrais.idEtat = Etat.id
 			where fichefrais.idvisiteur = '$idVisiteur'
 			order by mois desc";

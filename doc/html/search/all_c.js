@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['notifications_2ephp',['notifications.php',['../notifications_8php.html',1,'']]]
+  ['templates',['Templates',['../class_templates.html',1,'']]],
+  ['totalfiche',['totalFiche',['../class_data_access.html#a92fea595a6beeed318a80a084064a231',1,'DataAccess']]]
 ];

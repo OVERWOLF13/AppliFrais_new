@@ -34,10 +34,20 @@
 					$modLink = anchor('c_visiteur/voirFiche/'.$uneFiche['mois'], 'Consulter',  'title="Consulter la fiche"');
 				}
 				
+				if($uneFiche['CommentaireRefus'] != null && $uneFiche['libelle'] == 'Refusée')
+				{
+					$etat = $uneFiche['libelle'] . ' : '. $uneFiche['CommentaireRefus'];
+				}
+				
+				else
+				{
+					$etat = $uneFiche['libelle'];
+				}
+				
 				echo 
 				'<tr>
 					<td class="date">'.anchor('c_visiteur/voirFiche/'.$uneFiche['mois'], $uneFiche['mois'],  'title="Consulter la fiche"').'</td>
-					<td class="libelle">'.$uneFiche['libelle'].'</td>
+					<td class="libelle">'.$etat.'</td>
 					<td class="montant">'.$uneFiche['montantValide'].'</td>
 					<td class="date">'.$uneFiche['dateModif'].'</td>
 					<td class="action">'.$modLink.'</td>

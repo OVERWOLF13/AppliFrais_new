@@ -27,7 +27,7 @@ $this->load->helper('url');
 				$refuLink = '';
 				
 				if ($uneFiche['idEtat'] == 'CL') {
-					$modLink = anchor('c_comptable/voirFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], 'modifier les montants',  'title="modifier les montants de la fiche"');
+					$modLink = anchor('c_comptable/modifierFrais/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], 'modifier les montants',  'title="modifier les montants de la fiche"');
 					$validLink = anchor('c_comptable/validFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], 'valider',  'title="Valider la fiche"  onclick="return confirm(\'Voulez-vous vraiment valider cette fiche ?\');"');
 					$refuLink = anchor('c_comptable/commentRefuFiche/'.$uneFiche['mois'].'/'.$uneFiche['idVisiteur'], 'refuser',  'title="Refuser la fiche"');
 				}

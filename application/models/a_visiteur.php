@@ -43,6 +43,8 @@ class A_visiteur extends CI_Model {
 	 *
 	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $message : message facultatif destiné à notifier le visiteur du résultat d'une action précédemment exécutée
+	 * 
+	 * @return $data : les différentes fiches, et une notification si besoin
 	*/
 	public function mesFiches ($idVisiteur, $message=null)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
