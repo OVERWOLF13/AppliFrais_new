@@ -392,7 +392,7 @@ class C_comptable extends CI_Controller {
 					$this->a_comptable->rembourse($mois, $idVisiteur);
 					
 					//on met une notification
-					$data['notify'] = "La fiche a bien été mise en paiement";
+					$data['notify'] = "La fiche a bien été remboursée";
 					
 					//on récupère les fiches à suivres
 					$data['LesFichesASuivre'] = $this->a_comptable->SuivreFiches();
